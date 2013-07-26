@@ -1,6 +1,7 @@
 $ar_databases = ['activerecord_unittest', 'activerecord_unittest2']
 $as_vagrant   = 'sudo -u vagrant -H bash -l -c'
 $home         = '/home/vagrant'
+$user         = 'vagrant'
 
 Exec {
   path => ['/usr/sbin', '/usr/bin', '/sbin', '/bin']
@@ -121,6 +122,9 @@ package { 'nodejs':
   ensure => installed
 }
 
+# Screen package
+
+
 # --- Ruby ---------------------------------------------------------------------
 
 exec { 'install_rvm':
@@ -144,3 +148,29 @@ exec { "${as_vagrant} 'gem install bundler --no-rdoc --no-ri'":
   creates => "${home}/.rvm/bin/bundle",
   require => Exec['install_ruby']
 }
+
+# --- Screen config file --------------------------------------------------------------
+class install_screen {
+  #class { 'screen': }
+
+  file { "/home/$user/.screenrc":
+      ensure => file,
+      owner => $user,
+      group => $user,
+      mode => 0644,
+      content => template('screen/screenrc.erb'),
+  }
+
+  file { "/home/$user/.bashrc":
+      ensure => file,
+      owner => $user,
+      group => $user,
+      mode => 0644,
+      content => template('screen/bashrc.erb'),
+  }
+
+  package { 'screen':
+    ensure => installed
+  }
+}
+class { 'install_screen': }
