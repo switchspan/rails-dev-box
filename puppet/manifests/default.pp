@@ -122,8 +122,11 @@ package { 'nodejs':
   ensure => installed
 }
 
-# Screen package
+# Tmux package
 
+package { 'tmux': 
+  ensure => installed
+}
 
 # --- Ruby ---------------------------------------------------------------------
 
