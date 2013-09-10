@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+psql -f postgres_fix.sql postgres
+
